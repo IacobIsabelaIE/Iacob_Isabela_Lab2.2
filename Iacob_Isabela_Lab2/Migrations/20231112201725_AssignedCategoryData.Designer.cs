@@ -4,6 +4,7 @@ using Iacob_Isabela_Lab2.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Iacob_Isabela_Lab2.Migrations
 {
     [DbContext(typeof(Iacob_Isabela_Lab2Context))]
-    partial class Iacob_Isabela_Lab2ContextModelSnapshot : ModelSnapshot
+    [Migration("20231112201725_AssignedCategoryData")]
+    partial class AssignedCategoryData
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -50,6 +53,10 @@ namespace Iacob_Isabela_Lab2.Migrations
                         .HasColumnType("int");
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("ID"));
+
+                    b.Property<string>("Author")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<int?>("AuthorID")
                         .HasColumnType("int");
@@ -135,15 +142,13 @@ namespace Iacob_Isabela_Lab2.Migrations
 
             modelBuilder.Entity("Iacob_Isabela_Lab2.Models.Book", b =>
                 {
-                    b.HasOne("Iacob_Isabela_Lab2.Models.Author", "Author")
+                    b.HasOne("Iacob_Isabela_Lab2.Models.Author", null)
                         .WithMany("Books")
                         .HasForeignKey("AuthorID");
 
                     b.HasOne("Iacob_Isabela_Lab2.Models.Publisher", "Publisher")
                         .WithMany("Books")
                         .HasForeignKey("PublisherID");
-
-                    b.Navigation("Author");
 
                     b.Navigation("Publisher");
                 });

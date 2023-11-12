@@ -4,6 +4,7 @@ using Iacob_Isabela_Lab2.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Iacob_Isabela_Lab2.Migrations
 {
     [DbContext(typeof(Iacob_Isabela_Lab2Context))]
-    partial class Iacob_Isabela_Lab2ContextModelSnapshot : ModelSnapshot
+    [Migration("20231112205931_Member")]
+    partial class Member
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -52,9 +55,6 @@ namespace Iacob_Isabela_Lab2.Migrations
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("ID"));
 
                     b.Property<int?>("AuthorID")
-                        .HasColumnType("int");
-
-                    b.Property<int?>("BorrowingID")
                         .HasColumnType("int");
 
                     b.Property<decimal>("Price")
@@ -105,7 +105,10 @@ namespace Iacob_Isabela_Lab2.Migrations
             modelBuilder.Entity("Iacob_Isabela_Lab2.Models.Borrowing", b =>
                 {
                     b.Property<int>("ID")
+                        .ValueGeneratedOnAdd()
                         .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("ID"));
 
                     b.Property<int?>("BookID")
                         .HasColumnType("int");
@@ -117,6 +120,8 @@ namespace Iacob_Isabela_Lab2.Migrations
                         .HasColumnType("datetime2");
 
                     b.HasKey("ID");
+
+                    b.HasIndex("BookID");
 
                     b.HasIndex("MemberID");
 
@@ -223,10 +228,8 @@ namespace Iacob_Isabela_Lab2.Migrations
             modelBuilder.Entity("Iacob_Isabela_Lab2.Models.Borrowing", b =>
                 {
                     b.HasOne("Iacob_Isabela_Lab2.Models.Book", "Book")
-                        .WithOne("Borrowing")
-                        .HasForeignKey("Iacob_Isabela_Lab2.Models.Borrowing", "ID")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .WithMany()
+                        .HasForeignKey("BookID");
 
                     b.HasOne("Iacob_Isabela_Lab2.Models.Member", "Member")
                         .WithMany("Borrowings")
@@ -245,8 +248,6 @@ namespace Iacob_Isabela_Lab2.Migrations
             modelBuilder.Entity("Iacob_Isabela_Lab2.Models.Book", b =>
                 {
                     b.Navigation("BookCategories");
-
-                    b.Navigation("Borrowing");
                 });
 
             modelBuilder.Entity("Iacob_Isabela_Lab2.Models.Category", b =>

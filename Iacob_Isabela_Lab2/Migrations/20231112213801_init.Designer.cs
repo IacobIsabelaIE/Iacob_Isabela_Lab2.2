@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Iacob_Isabela_Lab2.Migrations
 {
     [DbContext(typeof(Iacob_Isabela_Lab2Context))]
-    [Migration("20231112201704_PublisherIndexData")]
-    partial class PublisherIndexData
+    [Migration("20231112213801_init")]
+    partial class init
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -54,11 +54,10 @@ namespace Iacob_Isabela_Lab2.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("ID"));
 
-                    b.Property<string>("Author")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
                     b.Property<int?>("AuthorID")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("BorrowingID")
                         .HasColumnType("int");
 
                     b.Property<decimal>("Price")
@@ -106,6 +105,27 @@ namespace Iacob_Isabela_Lab2.Migrations
                     b.ToTable("BookCategory");
                 });
 
+            modelBuilder.Entity("Iacob_Isabela_Lab2.Models.Borrowing", b =>
+                {
+                    b.Property<int>("ID")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("BookID")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("MemberID")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("ReturnDate")
+                        .HasColumnType("datetime2");
+
+                    b.HasKey("ID");
+
+                    b.HasIndex("MemberID");
+
+                    b.ToTable("Borrowing");
+                });
+
             modelBuilder.Entity("Iacob_Isabela_Lab2.Models.Category", b =>
                 {
                     b.Property<int>("ID")
@@ -121,6 +141,35 @@ namespace Iacob_Isabela_Lab2.Migrations
                     b.HasKey("ID");
 
                     b.ToTable("Category");
+                });
+
+            modelBuilder.Entity("Iacob_Isabela_Lab2.Models.Member", b =>
+                {
+                    b.Property<int>("ID")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("ID"));
+
+                    b.Property<string>("Adress")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Email")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("FirstName")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("LastName")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Phone")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("ID");
+
+                    b.ToTable("Member");
                 });
 
             modelBuilder.Entity("Iacob_Isabela_Lab2.Models.Publisher", b =>
@@ -142,13 +191,15 @@ namespace Iacob_Isabela_Lab2.Migrations
 
             modelBuilder.Entity("Iacob_Isabela_Lab2.Models.Book", b =>
                 {
-                    b.HasOne("Iacob_Isabela_Lab2.Models.Author", null)
+                    b.HasOne("Iacob_Isabela_Lab2.Models.Author", "Author")
                         .WithMany("Books")
                         .HasForeignKey("AuthorID");
 
                     b.HasOne("Iacob_Isabela_Lab2.Models.Publisher", "Publisher")
                         .WithMany("Books")
                         .HasForeignKey("PublisherID");
+
+                    b.Navigation("Author");
 
                     b.Navigation("Publisher");
                 });
@@ -172,6 +223,23 @@ namespace Iacob_Isabela_Lab2.Migrations
                     b.Navigation("Category");
                 });
 
+            modelBuilder.Entity("Iacob_Isabela_Lab2.Models.Borrowing", b =>
+                {
+                    b.HasOne("Iacob_Isabela_Lab2.Models.Book", "Book")
+                        .WithOne("Borrowing")
+                        .HasForeignKey("Iacob_Isabela_Lab2.Models.Borrowing", "ID")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Iacob_Isabela_Lab2.Models.Member", "Member")
+                        .WithMany("Borrowings")
+                        .HasForeignKey("MemberID");
+
+                    b.Navigation("Book");
+
+                    b.Navigation("Member");
+                });
+
             modelBuilder.Entity("Iacob_Isabela_Lab2.Models.Author", b =>
                 {
                     b.Navigation("Books");
@@ -180,11 +248,18 @@ namespace Iacob_Isabela_Lab2.Migrations
             modelBuilder.Entity("Iacob_Isabela_Lab2.Models.Book", b =>
                 {
                     b.Navigation("BookCategories");
+
+                    b.Navigation("Borrowing");
                 });
 
             modelBuilder.Entity("Iacob_Isabela_Lab2.Models.Category", b =>
                 {
                     b.Navigation("BookCategories");
+                });
+
+            modelBuilder.Entity("Iacob_Isabela_Lab2.Models.Member", b =>
+                {
+                    b.Navigation("Borrowings");
                 });
 
             modelBuilder.Entity("Iacob_Isabela_Lab2.Models.Publisher", b =>

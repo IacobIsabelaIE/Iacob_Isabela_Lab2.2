@@ -9,7 +9,7 @@ namespace Iacob_Isabela_Lab2.Data
 {
     public class Iacob_Isabela_Lab2Context : DbContext
     {
-        public Iacob_Isabela_Lab2Context (DbContextOptions<Iacob_Isabela_Lab2Context> options)
+        public Iacob_Isabela_Lab2Context(DbContextOptions<Iacob_Isabela_Lab2Context> options)
             : base(options)
         {
         }

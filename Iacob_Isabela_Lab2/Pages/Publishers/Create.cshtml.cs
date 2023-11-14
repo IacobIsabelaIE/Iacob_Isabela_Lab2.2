@@ -7,9 +7,11 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Iacob_Isabela_Lab2.Data;
 using Iacob_Isabela_Lab2.Models;
+using Microsoft.AspNetCore.Authorization;
 
 namespace Iacob_Isabela_Lab2.Pages.Publishers
 {
+    [Authorize(Roles = "Admin")]
     public class CreateModel : PageModel
     {
         private readonly Iacob_Isabela_Lab2.Data.Iacob_Isabela_Lab2Context _context;

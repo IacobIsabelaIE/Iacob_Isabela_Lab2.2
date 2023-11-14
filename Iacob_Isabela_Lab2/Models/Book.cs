@@ -9,12 +9,17 @@ namespace Iacob_Isabela_Lab2.Models
     {
         public int ID { get; set; }
 
+        [Required(ErrorMessage = "Title is required.")]
+        [StringLength(150, MinimumLength = 3, ErrorMessage = "Title must be at least 3 characters and a maximum of 150 characters.")]
         [Display(Name = "Book title")]
         public string Title { get; set; }
 
         [Column(TypeName = "decimal(6, 2)")]
+        [Range(0.01, 500)]
+
         public decimal Price { get; set; }
 
+        
         [DataType(DataType.Date)]
         public DateTime PublishingDate { get; set; }
 
